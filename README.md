@@ -31,7 +31,6 @@ $ npm install
 
 Next we need to get Prisma initialized and connected against our db-sync instance. 
 ```bash
-npx prisma
 npx prisma init
 ```
 
@@ -39,6 +38,21 @@ Now we should have 2 new files generated in our repository:
 
 * `prisma.schema`
 * `.env`
+
+If you open `prisma.schema` you will notice the schema is empty:
+```typescript
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+```
 
 For pulling the db-sync schema we are going to use the [Demeter.run](https://demeter.run) DB-Sync feature. 
 
@@ -94,9 +108,25 @@ From this tab you can select to expose a new port.
 
 <img src="/assets/expose-port-new.png" alt="expose-port-new">
 
-Once your port is exposed you can click en the auto generated URL and it should open a new browser tab with your application running.
+Once your port is exposed you can try a GET request to the auto-generated URL from your web browser
 
 <img src="/assets/expose-port-list.png" alt="expose-port-list">
+
+Example request with a policy id from the `preview` network:
+
+```bash 
+https://8000-slippery-sympathy-7n7uxh.us1.demeter.run/assets/policy/f5335f99c169cf2cbec9c6405750b533c011b24705590b800aa54cd6
+```
+
+```json
+[{
+	"id": "118",
+	"fingerprint": "asset1uxw6angvk9tvaa79u98xw44tcqf6hflur3jr34",
+	"name": "HOSKYt_Spectrum_Lq",
+	"policyId": "f5335f99c169cf2cbec9c6405750b533c011b24705590b800aa54cd6",
+	"quantity": 9223372036854776000
+}]
+```
 
 
 
