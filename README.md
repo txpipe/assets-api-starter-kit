@@ -8,7 +8,7 @@ For running this starter kit you'll need access to a running [DB-sync](https://d
 
 In case you don't want to install the required components yourself, you can use [Demeter.run](https://demeter.run) platform to create a cloud environment with access to common Cardano infrastructure. The following command will open this repo in a private, web-based VSCode IDE with access to a running DB-Sync instance in the preview network.
 
-[![Code in Cardano Workspace](https://demeter.run/code/badge.svg)](https://demeter.run/code?repository=https://github.com/txpipe/ada-handle-scrolls-starter-kit&template=typescript)
+[![Code in Cardano Workspace](https://demeter.run/code/badge.svg)](https://demeter.run/code?repository=https://github.com/txpipe/assets-api-starter-kit)
 
 ### Implementation Details
 
