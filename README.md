@@ -4,7 +4,7 @@ This starter kit shows how you can start building a simple REST API to query ass
 
 ## Dev Environment
 
-For running this starter kit you'll need access to a running [DB-sync](https://docs.cardano.org/cardano-components/cardano-db-sync/about-db-sync) instance in sync with a Node running on the network of your preference.
+For executing this starter kit you'll need access to a running [DB-sync](https://docs.cardano.org/cardano-components/cardano-db-sync/about-db-sync) instance in sync with a Node running on the network of your preference.
 
 In case you don't want to install the required components yourself, you can use [Demeter.run](https://demeter.run) platform to create a cloud environment with access to common Cardano infrastructure. The following command will open this repo in a private, web-based VSCode IDE with access to a running DB-Sync instance in the preview network.
 
@@ -12,13 +12,13 @@ In case you don't want to install the required components yourself, you can use 
 
 ### Implementation Details
 
-This Starter Kit implements a ver simple API with a single endpoint for querying the Assets information for a given PolicyId. 
+This Starter Kit implements a very simple REST API with a single GET endpoint for querying Assets information for a given `Policy Id`. 
 
 The server is a [NodeJs](https://nodejs.org/en/) application using [ExpressJS](https://expressjs.com/) and Typescript. 
 
 We have implemented the API following the clean architecture principles, making it easy to include new endpoints, data sources and use cases. 
 
-For connecting with the database layer we have chosen to use [Prisma](https://www.prisma.io/) providing us with a great development experience when it comes to access and querying db-sync. 
+For connecting with the database layer we have chosen to use [Prisma](https://www.prisma.io/) which provides us with a great development experience when it comes to access and querying db-sync. 
 
 <img src="/assets/diagram.png" alt="diagram">
 
@@ -88,7 +88,36 @@ npx prisma generate
 This command should have generated the high level Typescript objects for accessing DB-Sync from our code. 
 If you check the `prisma.schema` file again you should see its now updated with the schema definition of db-sync. 
 
-You can check in the `assetsDataSource.ts` how we are running the query using Prisma for querying DB-Sync and returning the Assets information mapped to a high-level object:
+```typescript
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ada_pots {
+  id       BigInt  @id @default(autoincrement())
+  slot_no  BigInt
+  epoch_no Int
+  treasury Decimal @db.Decimal(20, 0)
+  reserves Decimal @db.Decimal(20, 0)
+  rewards  Decimal @db.Decimal(20, 0)
+  utxo     Decimal @db.Decimal(20, 0)
+  deposits Decimal @db.Decimal(20, 0)
+  fees     Decimal @db.Decimal(20, 0)
+  block_id BigInt  @unique(map: "unique_ada_pots")
+  block    block   @relation(fields: [block_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+} ...
+```
+
+Feel free to explore the schema from this file, or you can use the `Schema` tab inside of the `DB-Sync` feature of [Demeter.run](https://demeter.run) for browsing the available tables. 
+
+<img src="assets/db-sync-schema.png" alt="db-sync schema">
+
+For our REST API we have implemented a data source in `assetsDataSource.ts`. You can check `DBSyncAssetsDataSource` for how we are using Prisma for querying DB-Sync and returning the Assets information mapped to a high-level object:
 
 ```typescript
 async getForPolicyId(policyId: string): Promise<Asset[]> {
@@ -110,7 +139,9 @@ async getForPolicyId(policyId: string): Promise<Asset[]> {
 }
 ```
 
-On the terminal run the following commands:
+#### Build and Run
+
+Once we have Prisma connected to our DB-Sync instance we can build and run the application. Go back to the terminal and execute the following commands:
 
 ```bash
 npm run build
@@ -139,6 +170,7 @@ Example request with a policy id from the `preview` network:
 https://8000-slippery-sympathy-7n7uxh.us1.demeter.run/assets/policy/f5335f99c169cf2cbec9c6405750b533c011b24705590b800aa54cd6
 ```
 
+The response we get for the given policy id:
 ```json
 [{
 	"id": "118",
