@@ -20,6 +20,7 @@ We have implemented the API following the clean architecture principles, making 
 
 For connecting with the database layer we have chosen to use [Prisma](https://www.prisma.io/) providing us with a great development experience when it comes to access and querying db-sync. 
 
+<img src="/assets/diagram.png" alt="diagram">
 
 ### Building & Running the Application
 
@@ -87,7 +88,27 @@ npx prisma generate
 This command should have generated the high level Typescript objects for accessing DB-Sync from our code. 
 If you check the `prisma.schema` file again you should see its now updated with the schema definition of db-sync. 
 
-Now we are ready to run and build the application
+You can check in the `assetsDataSource.ts` how we are running the query using Prisma for querying DB-Sync and returning the Assets information mapped to a high-level object:
+
+```typescript
+async getForPolicyId(policyId: string): Promise<Asset[]> {
+    const multiAssets = await this.client.multi_asset.findMany({
+        where: {
+            policy: Buffer.from(policyId, 'hex'),
+        },
+        include: {
+            ma_tx_mint: true,
+        }
+    });
+    return multiAssets.map((m) => {
+        const asset = mapAsset(m);
+        m.ma_tx_mint.forEach((t) => {
+            asset.quantity += t.quantity.toNumber();
+        });
+        return asset;
+    });
+}
+```
 
 On the terminal run the following commands:
 
