@@ -61,7 +61,7 @@ Open your project Console in [Demeter.run](https://demeter.run) and go to the DB
 
 <img src="assets/console-features.png" alt="db-sync features">
 
-Go into the feature detail and copy the value of the `Connecting string` field. 
+Go into the feature detail and copy the value of the `Connection string` field. 
 
 <img src="assets/db-sync-settings.png" alt="db-sync settings">
 
