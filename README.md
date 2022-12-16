@@ -158,11 +158,11 @@ For doing this in the [Demeter.run](https://demeter.run) console go to your work
 
 From this tab you can select to expose a new port. 
 
-<img src="/assets/expose-port-new.png" alt="expose-port-new">
+<img src="/assets/assets-api-expose-port.png" alt="expose-port-new">
 
 Once your port is exposed you can try a GET request to the auto-generated URL from your web browser
 
-<img src="/assets/expose-port-list.png" alt="expose-port-list">
+<img src="/assets/assets-api-exposed-ports.png" alt="expose-port-list">
 
 Example request with a policy id from the `preview` network:
 
