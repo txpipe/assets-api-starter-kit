@@ -27,16 +27,10 @@ export class DBSyncAssetsDataSource implements AssetsDataSource {
         const multiAssets = await this.client.multi_asset.findMany({
             where: {
                 policy: Buffer.from(policyId, 'hex'),
-            },
-            include: {
-                ma_tx_mint: true,
             }
         });
         return multiAssets.map((m) => {
             const asset = mapAsset(m);
-            m.ma_tx_mint.forEach((t) => {
-                asset.quantity += t.quantity.toNumber();
-            });
             return asset;
         });
     }
